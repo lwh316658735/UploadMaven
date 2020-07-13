@@ -4,9 +4,9 @@ apply plugin: 'com.jfrog.bintray'
 
 version = "0.1"
 
-def siteUrl = 'https://github.com/kuwork/rxbus' // project homepage
-def gitUrl = 'https://github.com/kuwork/rxbus.git' // project git
-
+def siteUrl = 'https://github.com/lwh316658735/UploadMaven' // project homepage
+def gitUrl = 'https://github.com/lwh316658735/UploadMaven.git' // project git
+group = "com.ssyb"
 android {
     compileSdkVersion 29
 
@@ -36,3 +36,72 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
 }
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'jar'
+                name 'ssyb_test'
+                url siteUrl
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'ssyb_test'
+                        name 'com.ssyb'
+                        email 'qq316658735@gmail.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+bintray {
+    user = 'lwh690140814'
+    key = 'bb70257be883f3be69e2b4e2ee5492db84c08b38'
+    configurations = ['archives']
+    pkg {
+        repo = "maven"
+        name = "ssyb_test" //项目名称
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+    }
+}
+/**
+ * gradlew javadocJar
+ * gradlew sourcesJar
+ * gradlew install
+ * gradlew bintrayUpload
+ **/
