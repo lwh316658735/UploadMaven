@@ -6,6 +6,6 @@ package com.sr.uploadmaven;
  */
 public class MyClass {
     public static void test() {
-        
+
     }
 }
